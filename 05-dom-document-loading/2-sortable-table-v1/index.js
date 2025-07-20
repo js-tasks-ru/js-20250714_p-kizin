@@ -27,7 +27,7 @@ export default class SortableTable {
     let sortFuntion;
     const coeff = order === 'asc' ? 1 : -1;
     if (sortType === 'string') {
-      sortFuntion = (a, b) => coeff * a[columnId].localeCompare(b[columnId]);
+      sortFuntion = (a, b) => coeff * a[columnId].localeCompare(b[columnId], ['ru', 'en'], { caseFirst: 'upper' });
     }
     else if (sortType === 'number') {
       sortFuntion = (a, b) => coeff * (a[columnId] - b[columnId]);
