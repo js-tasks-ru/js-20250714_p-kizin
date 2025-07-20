@@ -16,9 +16,7 @@ export default class ColumnChart extends ColumnChartData {
 
     let container = this.#element.children[1];
     let body = container.children[1];
-    while (body.lastElementChild) {
-      body.removeChild(body.lastElementChild);
-    }
+    body.innerHTML = '';
 
     body.append(...ColumnChartBuilder.buildValues(this));
   }
@@ -27,6 +25,8 @@ export default class ColumnChart extends ColumnChartData {
     this.#element = null;
   }
 
-  destroy() {}
+  destroy() {
+    this.remove();
+  }
 }
   
