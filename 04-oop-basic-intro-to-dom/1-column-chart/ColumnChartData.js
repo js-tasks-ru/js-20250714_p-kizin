@@ -1,33 +1,42 @@
 export default class ColumnChartData {
-  #data = [];
+  #data;
   get data() { return this.#data; }
 
-  #label = '';
+  #label;
   get label() { return this.#label; }
 
-  #value = 0;
+  #value;
   get value() { return this.#value; }
 
-  #link = '';
+  #link;
   get link() { return this.#link; }
 
-  #formatHeading = data => `${data}`;
+  #formatHeading;
   get formatHeading() { return this.#formatHeading; }
 
-  #chartHeight = 50;
+  #chartHeight;
   get chartHeight() { return this.#chartHeight; }
 
-  constructor({ data, label, value, link, formatHeading, chartHeight } = {}) {
-    this.#data = data ?? this.#data;
-    this.#label = label ?? this.#label;
-    this.#value = value ?? this.#value;
-    this.#link = link ?? this.#link;
-    this.#formatHeading = formatHeading ?? this.#formatHeading;
-    this.#chartHeight = chartHeight ?? this.#chartHeight;
+  constructor({ data = [], label = '', value = 0, link = '', formatHeading = data => `${data}`, chartHeight = 50 } = {}) {
+    this.#data = data;
+    this.#label = label;
+    this.#value = value;
+    this.#link = link;
+    this.#formatHeading = formatHeading;
+    this.#chartHeight = chartHeight;
   }
 
-  update(data) {
-    this.#data = data ?? this.#data;
+  update(data = []) {
+    this.#data = data;
+  }
+
+  remove() {
+    this.#data = undefined;
+    this.#label = undefined;
+    this.#value = undefined;
+    this.#link = undefined;
+    this.#formatHeading = undefined;
+    this.#chartHeight = undefined;
   }
 }
   

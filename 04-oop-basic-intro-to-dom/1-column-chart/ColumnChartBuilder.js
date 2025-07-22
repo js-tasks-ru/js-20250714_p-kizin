@@ -7,7 +7,7 @@ export default class ColumnChartBuilder {
 
     let container = ColumnChartBuilder.#buildContainer(data);
     chart.appendChild(container);
-  
+
     return chart;
   }
 
@@ -41,7 +41,7 @@ export default class ColumnChartBuilder {
     let title = document.createElement('div');
     title.classList.add('column-chart__title');
     title.textContent = data.label;
-  
+
     if (data.link) {
       let link = document.createElement('a');
       link.classList.add('column-chart__link');

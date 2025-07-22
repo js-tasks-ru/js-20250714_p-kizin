@@ -2,7 +2,7 @@ import ColumnChartBuilder from "./ColumnChartBuilder";
 import ColumnChartData from "./ColumnChartData";
 
 export default class ColumnChart extends ColumnChartData {
-  #element = null;
+  #element;
   get element() { return this.#element; }
 
   constructor(data) {
@@ -22,7 +22,9 @@ export default class ColumnChart extends ColumnChartData {
   }
 
   remove() {
-    this.#element = null;
+    super.remove();
+    
+    this.#element.remove();
   }
 
   destroy() {
