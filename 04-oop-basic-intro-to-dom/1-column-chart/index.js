@@ -1,3 +1,3 @@
-export default class ColumnChart {
+import ColumnChart from "./ColumnChart";
 
-}
+export default ColumnChart;

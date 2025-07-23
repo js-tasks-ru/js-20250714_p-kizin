@@ -1,3 +1,3 @@
-export default class NotificationMessage {
+import NotificationMessage from "./NotificationMessage";
 
-}
+export default NotificationMessage;
