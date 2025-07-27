@@ -1,8 +1,12 @@
 class Tooltip {
   static #singleton;
 
-  static #element;
-  get element() { return Tooltip.#element; }
+  #element;
+  get element() { return this.#element; }
+
+  #elementPointerOverHandler;
+
+  #elementPointerOutHandler;
 
   constructor() {
     if (!Tooltip.#singleton) {
@@ -13,43 +17,51 @@ class Tooltip {
   }
 
   initialize () {
-    if (Tooltip.#element) { return; }
+    if (this.#element) { return; }
     
     const tooltip = document.createElement('div');
     tooltip.classList.add('tooltip');
 
-    Tooltip.#element = tooltip;
+    this.#element = tooltip;
 
     const render = (message) => this.render(message);
 
     const remove = () => this.remove();
 
-    document.addEventListener('pointerover', function (event) {
+    this.#elementPointerOverHandler = function (event) {
       if (event.target.dataset.tooltip != undefined) {
         render(event.target.dataset.tooltip);
       }
-    });
+    };
 
-    document.addEventListener('pointerout', function (event) {
+    this.#elementPointerOutHandler = function (event) {
       if (event.target.dataset.tooltip != undefined) {
         remove();
       }
-    });
+    };
+
+    document.addEventListener('pointerover', this.#elementPointerOverHandler);
+
+    document.addEventListener('pointerout', this.#elementPointerOutHandler);
   }
 
   render(message = '') {
-    if (!Tooltip.#element) { return; }
+    if (!this.#element) { return; }
 
-    Tooltip.#element.textContent = message;
+    this.#element.textContent = message;
 
     const container = document.getElementById('container');
-    container.append(Tooltip.#element);
+    container.append(this.#element);
   }
 
   remove() {
-    if (!Tooltip.#element) { return; }
+    if (!this.#element) { return; }
+
+    this.#element.removeEventListener('pointerover', this.#elementPointerOverHandler);
+
+    this.#element.removeEventListener('pointerout', this.#elementPointerOutHandler);
     
-    Tooltip.#element.remove();
+    this.#element.remove();
   }
 
   destroy() {
