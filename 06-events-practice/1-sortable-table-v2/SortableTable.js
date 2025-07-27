@@ -8,12 +8,24 @@ export default class SortableTable extends SortableTableData {
   #subElements;
   get subElements() { return this.#subElements; }
 
+  #elementEventListener;
+
   constructor(headerConfig, { data, sorted }) {
     super(headerConfig, data);
 
     this.#element = SortableTableBuilder.build(this);
 
-    this.#setHeaderHandler();
+    const clickHeader = (columnId, order) => this.clickHeader(columnId, order);
+
+    this.#elementEventListener = function (event) {
+      if (!event.target.classList.contains('sortable-table__cell')) { return; }
+      
+      const { id: columnId, order } = event.target.dataset;
+
+      clickHeader(columnId, order);
+    };
+
+    this.#element.addEventListener('pointerdown', this.#elementEventListener);
 
     this.#subElements = {
       header: this.#element.children[0],
@@ -36,8 +48,6 @@ export default class SortableTable extends SortableTableData {
     header.innerHTML = '';
     header.innerHTML = SortableTableBuilder.buildHeaderContent(this);
 
-    this.#setHeaderHandler();
-
     const body = this.#element.querySelector(`.sortable-table__body`);
     body.innerHTML = '';
     body.innerHTML = SortableTableBuilder.buildBodyContent(this);
@@ -50,22 +60,13 @@ export default class SortableTable extends SortableTableData {
   remove() {
     super.remove();
 
+    this.#element.removeEventListener('pointerdown', this.#elementEventListener);
+
     this.#element.remove();
   }
 
   destroy() {
     this.remove();
-  }
-
-  #setHeaderHandler() {
-    this.headerConfig
-      .filter(({ sortable }) => sortable)
-      .forEach(({ id: columnId, order }) => {
-        const column = this.#element.querySelector(`.sortable-table__cell[data-id=${columnId}]`);
-        column.addEventListener('pointerdown', () => {
-          this.clickHeader(columnId, order);
-        });
-      });
   }
 }
 
