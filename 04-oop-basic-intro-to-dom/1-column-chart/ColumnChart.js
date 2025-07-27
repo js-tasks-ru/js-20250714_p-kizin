@@ -14,8 +14,8 @@ export default class ColumnChart extends ColumnChartData {
   update(data) {
     super.update(data);
 
-    let container = this.#element.children[1];
-    let body = container.children[1];
+    const container = this.#element.children[1];
+    const body = container.children[1];
     body.innerHTML = '';
 
     body.append(...ColumnChartBuilder.buildValues(this));

@@ -30,8 +30,5 @@ export default class SortableTableData {
     }
   }
 
-  remove() {
-    this.#headerConfig = undefined;
-    this.#data = undefined;
-  }
+  remove() {}
 }

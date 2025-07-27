@@ -1,9 +1,9 @@
 export default class SortableTableBuilder {
   static build(data) {
-    let table = document.createElement('div');
+    const table = document.createElement('div');
     table.classList.add('sortable-table');
 
-    let header = document.createElement('div');
+    const header = document.createElement('div');
     header.classList.add('sortable-table__header');
     header.classList.add('sortable-table__row');
     header.setAttribute('data-element', 'header');
@@ -11,7 +11,7 @@ export default class SortableTableBuilder {
 
     table.appendChild(header);
 
-    let body = document.createElement('div');
+    const body = document.createElement('div');
     body.classList.add('sortable-table__body');
     body.setAttribute('data-element', 'body');
     body.innerHTML = SortableTableBuilder.buildBodyContent(data);

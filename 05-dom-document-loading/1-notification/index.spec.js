@@ -92,4 +92,14 @@ describe('dom-document-loading/notification', () => {
 
     expect(notificationMessage.element).not.toBeInTheDocument();
   });
+
+  it('should show only one message simultaneously', () => {
+    const duration = 1000;
+
+    const nextNotificationMessage = new NotificationMessage('message', {
+      duration
+    });
+
+    expect(notificationMessage.element).not.toBeInTheDocument();
+  });
 });

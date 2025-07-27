@@ -30,13 +30,6 @@ export default class ColumnChartData {
     this.#data = data;
   }
 
-  remove() {
-    this.#data = undefined;
-    this.#label = undefined;
-    this.#value = undefined;
-    this.#link = undefined;
-    this.#formatHeading = undefined;
-    this.#chartHeight = undefined;
-  }
+  remove() {}
 }
   

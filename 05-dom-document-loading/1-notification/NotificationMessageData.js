@@ -14,9 +14,5 @@ export default class NotificationMessageData {
     this.#type = type;
   }
 
-  remove() {
-    this.#message = undefined;
-    this.#duration = undefined;
-    this.#type = undefined;
-  }
+  remove() {}
 }
