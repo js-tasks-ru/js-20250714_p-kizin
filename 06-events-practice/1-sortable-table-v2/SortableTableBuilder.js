@@ -7,7 +7,7 @@ export default class SortableTableBuilder {
     header.classList.add('sortable-table__header');
     header.classList.add('sortable-table__row');
     header.setAttribute('data-element', 'header');
-    header.innerHTML = SortableTableBuilder.#buildHeaderContent(data);
+    header.innerHTML = SortableTableBuilder.buildHeaderContent(data);
 
     table.appendChild(header);
 
@@ -21,6 +21,22 @@ export default class SortableTableBuilder {
     return table;
   }
 
+  static buildHeaderContent(data) {
+    const headerContent = data.headerConfig
+        .map(({id, title, sortable, order}) => `
+          <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" ${order && `data-order="${order}"`}">
+            <span>${title}</span>
+              ${order && `
+                <span data-element="arrow" class="sortable-table__sort-arrow">
+                  <span class="sort-arrow"></span>
+                </span>
+              `}
+          </div>
+        `);
+      
+    return headerContent;
+  }
+
   static buildBodyContent(data) {
     const bodyContent = data.data
         .map(({id, ...rest}) => `
@@ -32,21 +48,5 @@ export default class SortableTableBuilder {
         `);
 
     return bodyContent;
-  }
-
-  static #buildHeaderContent(data) {
-    const headerContent = data.headerConfig
-        .map(({id, title, sortable, order}) => `
-          <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" ${order && `data-order="${order}"`}>
-            <span>${title}</span>
-              ${order && `
-                <span data-element="arrow" class="sortable-table__sort-arrow">
-                  <span class="sort-arrow"></span>
-                </span>
-              `}
-          </div>
-        `);
-      
-    return headerContent;
   }
 }
