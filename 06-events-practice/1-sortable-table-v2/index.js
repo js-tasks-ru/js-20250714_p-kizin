@@ -1,8 +1,3 @@
-export default class SortableTable {
-  constructor(headersConfig, {
-    data = [],
-    sorted = {}
-  } = {}) {
+import SortableTable from "./SortableTable";
 
-  }
-}
+export default SortableTable;

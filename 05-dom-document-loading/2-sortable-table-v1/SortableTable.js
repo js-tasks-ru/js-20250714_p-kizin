@@ -22,18 +22,16 @@ export default class SortableTable extends SortableTableData {
   sort(columnId, order) {
     super.sort(columnId, order);
 
-    let body = this.#element.querySelector(`.sortable-table__body`);
+    const body = this.#element.querySelector(`.sortable-table__body`);
     body.innerHTML = '';
     body.innerHTML = SortableTableBuilder.buildBodyContent(this);
 
-    let column = this.#element.querySelector(`.sortable-table__cell[data-id=${columnId}]`);
+    const column = this.#element.querySelector(`.sortable-table__cell[data-id=${columnId}]`);
     column.setAttribute('data-order', order);
   }
 
   remove() {
     super.remove();
-
-    this.#subElements = undefined;
 
     this.#element.remove();
   }

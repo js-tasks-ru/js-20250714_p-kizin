@@ -11,7 +11,19 @@ export default class SortableTableData {
   }
 
   sort(columnId, order) {
-    const { sortType } = this.#headerConfig.find(({id}) => id === columnId);
+    const sortable = this.isColumnSortable(columnId);
+    if (!sortable) { return; }
+
+    this.#headerConfig
+      .filter(({ sortable }) => sortable)
+      .forEach(column => {
+        column.order = undefined;
+      });
+    
+    const sortColumn = this.#headerConfig.find(({id}) => id === columnId);
+    sortColumn.order = order;
+    
+    const { sortType } = sortColumn;
 
     let sortFuntion;
     const coeff = order === 'asc' ? 1 : -1;
@@ -28,6 +40,12 @@ export default class SortableTableData {
     if (sortFuntion) {
       this.#data.sort(sortFuntion);
     }
+  }
+
+  isColumnSortable(columnId) {
+    const { sortable } = this.#headerConfig.find(({id}) => id === columnId);
+
+    return sortable;
   }
 
   remove() {}
