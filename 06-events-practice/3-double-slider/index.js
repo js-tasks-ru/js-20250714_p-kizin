@@ -140,16 +140,16 @@ export default class DoubleSlider {
     }
 
     remove() {
+      this.#element.remove();
+    }
+
+    destroy() {
       this.#element.removeEventListener('pointerdown', this.#elementPointerDownHandler);
 
       this.#element.removeEventListener('pointerup', this.#elementPointerUpHandler);
 
       this.#element.removeEventListener('pointermove', this.#elementPointerMoveHandler);
     
-      this.#element.remove();
-    }
-
-    destroy() {
       this.remove();
     }
 }

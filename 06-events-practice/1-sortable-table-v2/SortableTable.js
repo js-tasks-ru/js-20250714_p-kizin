@@ -59,13 +59,13 @@ export default class SortableTable extends SortableTableData {
 
   remove() {
     super.remove();
-
-    this.#element.removeEventListener('pointerdown', this.#elementEventListener);
-
-    this.#element.remove();
   }
 
   destroy() {
+    this.#element.removeEventListener('pointerdown', this.#elementEventListener);
+
+    this.#element.remove();
+
     this.remove();
   }
 }

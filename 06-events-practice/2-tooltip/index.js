@@ -57,14 +57,16 @@ class Tooltip {
   remove() {
     if (!this.#element) { return; }
 
-    this.#element.removeEventListener('pointerover', this.#elementPointerOverHandler);
-
-    this.#element.removeEventListener('pointerout', this.#elementPointerOutHandler);
-    
     this.#element.remove();
   }
 
   destroy() {
+    if (!this.#element) { return; }
+    
+    this.#element.removeEventListener('pointerover', this.#elementPointerOverHandler);
+
+    this.#element.removeEventListener('pointerout', this.#elementPointerOutHandler);
+    
     this.remove();
   }
 }
