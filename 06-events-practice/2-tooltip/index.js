@@ -19,30 +19,9 @@ class Tooltip {
   initialize () {
     if (this.#element) { return; }
     
-    const tooltip = document.createElement('div');
-    tooltip.classList.add('tooltip');
-
-    this.#element = tooltip;
-
-    const render = (message) => this.render(message);
-
-    const remove = () => this.remove();
-
-    this.#elementPointerOverHandler = function (event) {
-      if (event.target.dataset.tooltip != undefined) {
-        render(event.target.dataset.tooltip);
-      }
-    };
-
-    this.#elementPointerOutHandler = function (event) {
-      if (event.target.dataset.tooltip != undefined) {
-        remove();
-      }
-    };
-
-    document.addEventListener('pointerover', this.#elementPointerOverHandler);
-
-    document.addEventListener('pointerout', this.#elementPointerOutHandler);
+    this.#createElement();
+    this.#addPointerOverHandler();
+    this.#addPointerOutHandler();
   }
 
   render(message = '') {
@@ -62,12 +41,43 @@ class Tooltip {
 
   destroy() {
     if (!this.#element) { return; }
-    
+
     this.#element.removeEventListener('pointerover', this.#elementPointerOverHandler);
 
     this.#element.removeEventListener('pointerout', this.#elementPointerOutHandler);
     
     this.remove();
+  }
+
+  #createElement() {
+    const tooltip = document.createElement('div');
+    tooltip.classList.add('tooltip');
+
+    this.#element = tooltip;
+  }
+
+  #addPointerOverHandler() {
+    const render = (message) => this.render(message);
+
+    this.#elementPointerOverHandler = function (event) {
+      if (event.target.dataset.tooltip != undefined) {
+        render(event.target.dataset.tooltip);
+      }
+    };
+
+    document.addEventListener('pointerover', this.#elementPointerOverHandler);
+  }
+
+  #addPointerOutHandler() {
+    const remove = () => this.remove();
+
+    this.#elementPointerOutHandler = function (event) {
+      if (event.target.dataset.tooltip != undefined) {
+        remove();
+      }
+    };
+
+    document.addEventListener('pointerout', this.#elementPointerOutHandler);
   }
 }
 

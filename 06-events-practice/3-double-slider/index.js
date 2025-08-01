@@ -29,17 +29,29 @@ export default class DoubleSlider {
       this.#formatValue = formatValue;
       this.#selected = selected ?? { from: this.#min, to: this.#max};
 
-      this.build();
-      this.render();
-      this.addPointerDownHandler();
-      this.addPointerMoveHandler();
+      this.#createElement();
+      this.#render();
+      this.#addPointerDownHandler();
+      this.#addPointerUpHandler();
+      this.#addPointerMoveHandler();
     }
 
-    build() {
-      const rangeSlider = document.createElement('div');
-      rangeSlider.classList.add('range-slider');
+    remove() {
+      this.#element.remove();
+    }
 
-      rangeSlider.innerHTML = `
+    destroy() {
+      this.#element.removeEventListener('pointerdown', this.#elementPointerDownHandler);
+
+      this.#element.removeEventListener('pointerup', this.#elementPointerUpHandler);
+
+      this.#element.removeEventListener('pointermove', this.#elementPointerMoveHandler);
+    
+      this.remove();
+    }
+
+    #createTemplate() {
+      const template = `
           <span data-element="from">$10</span>
             <div class="range-slider__inner">
               <span class="range-slider__progress" style="left: 0%; right: 0%"></span>
@@ -49,10 +61,19 @@ export default class DoubleSlider {
           <span data-element="to">$100</span>
         `;
 
+      return template;
+    }
+
+    #createElement() {
+      const rangeSlider = document.createElement('div');
+      rangeSlider.classList.add('range-slider');
+
+      rangeSlider.innerHTML = this.#createTemplate();
+
       this.#element = rangeSlider;
     }
 
-    render() {
+    #render() {
       const left = Math.floor((this.#selected.from - this.#min) * 100 / (this.#max - this.#min));
       const right = Math.floor((this.#max - this.#selected.to) * 100 / (this.#max - this.#min));
   
@@ -73,14 +94,9 @@ export default class DoubleSlider {
       element.textContent = this.#formatValue(this.#selected.to);
     }
 
-    addPointerDownHandler() {
+    #addPointerDownHandler() {
       const press = () => {
         this.#pressed = true;
-      };
-
-      const unpress = () => {
-        this.#pressed = false;
-        this.#element.dispatchEvent(new CustomEvent('range-select', { detail: this.#selected }));
       };
 
       this.#elementPointerDownHandler = function (event) {
@@ -89,7 +105,17 @@ export default class DoubleSlider {
   
         press();
       };
-  
+
+
+      this.#element.addEventListener('pointerdown', this.#elementPointerDownHandler);
+    }
+
+    #addPointerUpHandler() {
+      const unpress = () => {
+        this.#pressed = false;
+        this.#element.dispatchEvent(new CustomEvent('range-select', { detail: this.#selected }));
+      };
+
       this.#elementPointerUpHandler = function (event) {
         if (!event.target.classList.contains('range-slider__thumb-left')
               && !event.target.classList.contains('range-slider__thumb-right')) { return; }
@@ -97,12 +123,10 @@ export default class DoubleSlider {
         unpress();
       };
 
-      this.#element.addEventListener('pointerdown', this.#elementPointerDownHandler);
-
       this.#element.addEventListener('pointerup', this.#elementPointerUpHandler);
     }
 
-    addPointerMoveHandler() {
+    #addPointerMoveHandler() {
       const isPressed = () => this.#pressed;
   
       const moveThumbLeft = (event) => {
@@ -119,7 +143,7 @@ export default class DoubleSlider {
           : Math.floor((1000 - event.clientX) / 1000 * this.#min + event.clientX / 1000 * this.#max);
       };
 
-      const render = () => this.render();
+      const render = () => this.#render();
 
       this.#elementPointerMoveHandler = function (event) {
         if (!event.target.classList.contains('range-slider__thumb-left')
@@ -137,19 +161,5 @@ export default class DoubleSlider {
       };
   
       this.#element.addEventListener('pointermove', this.#elementPointerMoveHandler);
-    }
-
-    remove() {
-      this.#element.remove();
-    }
-
-    destroy() {
-      this.#element.removeEventListener('pointerdown', this.#elementPointerDownHandler);
-
-      this.#element.removeEventListener('pointerup', this.#elementPointerUpHandler);
-
-      this.#element.removeEventListener('pointermove', this.#elementPointerMoveHandler);
-    
-      this.remove();
     }
 }
