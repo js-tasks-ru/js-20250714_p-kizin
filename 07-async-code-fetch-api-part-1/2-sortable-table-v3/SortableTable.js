@@ -93,12 +93,12 @@ export default class SortableTable extends SortableTableData {
   }
 
   #addPointerDownHandler() {
-    this.#elementPointerDownHandler = (event) => {
+    this.#elementPointerDownHandler = async (event) => {
       if (!event.target.classList.contains('sortable-table__cell')) { return; }
       
       const { id: columnId, order } = event.target.dataset;
 
-      this.#clickHeader(columnId, order);
+      await this.#clickHeader(columnId, order);
     };
 
     this.#element.addEventListener('pointerdown', this.#elementPointerDownHandler);
@@ -134,12 +134,14 @@ export default class SortableTable extends SortableTableData {
   }
 
   async #clickHeader(columnId, order) {
+    const newOrder = order === 'desc' ? 'asc' : 'desc';
+
     if (this.isSortLocally) {
-      this.sortOnClient(columnId, order === 'desc' ? 'asc' : 'desc');
+      this.sortOnClient(columnId, newOrder);
     } else {
       this.#createTemplate(true);
 
-      await this.sortOnServer(columnId, order === 'desc' ? 'asc' : 'desc');
+      await this.sortOnServer(columnId, newOrder);
     }
 
     this.#createTemplate();
