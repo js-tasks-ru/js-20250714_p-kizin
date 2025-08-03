@@ -1,7 +1,3 @@
-import fetchJson from './utils/fetch-json.js';
+import ColumnChart from "./ColumnChart";
 
-const BACKEND_URL = 'https://course-js.javascript.ru';
-
-export default class ColumnChart {
-
-}
+export default ColumnChart;
