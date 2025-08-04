@@ -1,6 +1,6 @@
-import ColumnChartBuilder from "./ColumnChartBuilder";
-import ColumnChartData from "./ColumnChartData";
-import ColumnChartLoader from "./ColumnChartLoader";
+import ColumnChartBuilder from "./ColumnChartBuilder.js";
+import ColumnChartData from "./ColumnChartData.js";
+import ColumnChartLoader from "./ColumnChartLoader.js";
 
 export default class ColumnChart extends ColumnChartData {
   #element;
@@ -15,20 +15,26 @@ export default class ColumnChart extends ColumnChartData {
     this.#element = ColumnChartBuilder.build(this);
 
     this.#subElements = {
+      container: this.#element.children[1],
+      header: this.#element.children[1].children[0],
       body: this.#element.children[1].children[1],
     };
+
+    (async () => await this.update(this.range.from, this.range.to))();
   }
 
   async update(from, to) {
-    const data = await ColumnChartLoader.loadData(from, to);
+    this.#element.classList.add('column-chart_loading');
+
+    const data = await ColumnChartLoader.loadData(this.url, from, to);
+
+    this.#element.classList.remove('column-chart_loading');
 
     super.update(data);
 
-    const container = this.#element.children[1];
-    const body = container.children[1];
-    body.innerHTML = '';
-
-    body.append(...ColumnChartBuilder.buildValues(this));
+    this.#subElements.header.textContent = this.formatHeading(this.value);
+    this.#subElements.body.innerHTML = '';
+    this.#subElements.body.append(...ColumnChartBuilder.buildValues(this));
 
     return data;
   }

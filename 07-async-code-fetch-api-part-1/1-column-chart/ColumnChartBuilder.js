@@ -12,7 +12,7 @@ export default class ColumnChartBuilder {
   }
 
   static buildValues(data) {
-    const maxVal = Math.max(Object.values(data.data));
+    const maxVal = Math.max(...Object.values(data.data));
 
     const values = Object.values(data.data).map(val => {
       const value = document.createElement('div');
