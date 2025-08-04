@@ -33,7 +33,7 @@ export default class SortableTable extends SortableTableData {
   }
 
   destroy() {
-    this.#element.removeEventListener('pointerdown', this.#elementPointerDownHandler);
+    document.removeEventListener('pointerdown', this.#elementPointerDownHandler);
 
     this.#element.remove();
 
@@ -41,17 +41,15 @@ export default class SortableTable extends SortableTableData {
   }
 
   #addPointerDownHandler() {
-    const clickHeader = (columnId, order) => this.#clickHeader(columnId, order);
-
-    this.#elementPointerDownHandler = function (event) {
+    this.#elementPointerDownHandler = (event) => {
       if (!event.target.classList.contains('sortable-table__cell')) { return; }
       
       const { id: columnId, order } = event.target.dataset;
 
-      clickHeader(columnId, order);
+      this.#clickHeader(columnId, order);
     };
 
-    this.#element.addEventListener('pointerdown', this.#elementPointerDownHandler);
+    document.addEventListener('pointerdown', this.#elementPointerDownHandler);
   }
 
   #sort(columnId, order) {

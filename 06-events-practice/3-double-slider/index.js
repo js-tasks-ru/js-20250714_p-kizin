@@ -11,17 +11,10 @@ export default class DoubleSlider {
     #selected
     get selected() { return this.#selected; }
 
-    #pressed
-    get pressed() { return this.#pressed; }
-
     #element
     get element() { return this.#element; }
 
-    #elementPointerDownHandler
-
     #elementPointerMoveHandler
-
-    #elementPointerUpHandler
 
     constructor({ min = 0, max = 100, formatValue = value => value, selected } = {}) {
       this.#min = min;
@@ -31,8 +24,6 @@ export default class DoubleSlider {
 
       this.#createElement();
       this.#render();
-      this.#addPointerDownHandler();
-      this.#addPointerUpHandler();
       this.#addPointerMoveHandler();
     }
 
@@ -41,11 +32,7 @@ export default class DoubleSlider {
     }
 
     destroy() {
-      this.#element.removeEventListener('pointerdown', this.#elementPointerDownHandler);
-
-      this.#element.removeEventListener('pointerup', this.#elementPointerUpHandler);
-
-      this.#element.removeEventListener('pointermove', this.#elementPointerMoveHandler);
+      document.removeEventListener('pointermove', this.#elementPointerMoveHandler);
     
       this.remove();
     }
@@ -94,41 +81,7 @@ export default class DoubleSlider {
       element.textContent = this.#formatValue(this.#selected.to);
     }
 
-    #addPointerDownHandler() {
-      const press = () => {
-        this.#pressed = true;
-      };
-
-      this.#elementPointerDownHandler = function (event) {
-        if (!event.target.classList.contains('range-slider__thumb-left')
-              && !event.target.classList.contains('range-slider__thumb-right')) { return; }
-  
-        press();
-      };
-
-
-      this.#element.addEventListener('pointerdown', this.#elementPointerDownHandler);
-    }
-
-    #addPointerUpHandler() {
-      const unpress = () => {
-        this.#pressed = false;
-        this.#element.dispatchEvent(new CustomEvent('range-select', { detail: this.#selected }));
-      };
-
-      this.#elementPointerUpHandler = function (event) {
-        if (!event.target.classList.contains('range-slider__thumb-left')
-              && !event.target.classList.contains('range-slider__thumb-right')) { return; }
-  
-        unpress();
-      };
-
-      this.#element.addEventListener('pointerup', this.#elementPointerUpHandler);
-    }
-
     #addPointerMoveHandler() {
-      const isPressed = () => this.#pressed;
-  
       const moveThumbLeft = (event) => {
         const moveToLeft = event.clientX / 1000 < this.#selected.from / this.#min;
         this.#selected.from = moveToLeft
@@ -143,13 +96,9 @@ export default class DoubleSlider {
           : Math.floor((1000 - event.clientX) / 1000 * this.#min + event.clientX / 1000 * this.#max);
       };
 
-      const render = () => this.#render();
-
-      this.#elementPointerMoveHandler = function (event) {
+      this.#elementPointerMoveHandler = (event) => {
         if (!event.target.classList.contains('range-slider__thumb-left')
               && !event.target.classList.contains('range-slider__thumb-right')) { return; }
-  
-        if (!isPressed()) { return; }
   
         if (event.target.classList.contains('range-slider__thumb-left')) {
           moveThumbLeft(event);
@@ -157,9 +106,11 @@ export default class DoubleSlider {
           moveThumbRight(event);
         }
 
-        render();
+        this.#render();
+
+        this.#element.dispatchEvent(new CustomEvent('range-select', { detail: this.#selected }));
       };
   
-      this.#element.addEventListener('pointermove', this.#elementPointerMoveHandler);
+      document.addEventListener('pointermove', this.#elementPointerMoveHandler);
     }
 }

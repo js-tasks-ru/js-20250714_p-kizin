@@ -38,6 +38,10 @@ export default class NotificationMessage extends NotificationMessageData {
   }
 
   destroy() {
+    if (NotificationMessage.#prevMessage) {
+      NotificationMessage.#prevMessage.remove();
+    }
+    
     this.remove();
   }
 }
