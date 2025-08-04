@@ -48,8 +48,13 @@ export default class SortableTable extends SortableTableData {
 
     super.update(data);
 
-    if (this.sorted && this.isSortLocally) {
-      this.sortOnClient(columnId, order); 
+    if (this.sorted) {
+      if (this.isSortLocally) {
+        this.sortOnClient(columnId, order); 
+      }
+      else {
+        super.updateSortColumn(columnId, order);
+      }
     }
 
     this.#createTemplate();
@@ -85,7 +90,7 @@ export default class SortableTable extends SortableTableData {
   destroy() {
     this.#element.removeEventListener('pointerdown', this.#elementPointerDownHandler);
 
-    this.#element.removeEventListener('scroll', this.#elementScrollDownHandler);
+    document.removeEventListener('scroll', this.#elementScrollDownHandler);
 
     this.#element.remove();
 
@@ -107,9 +112,6 @@ export default class SortableTable extends SortableTableData {
   #addScrollDownHandler() {
     this.#elementScrollDownHandler = async (event) => {
       if (Math.abs(event.target.scrollingElement.scrollHeight - event.target.scrollingElement.scrollTop - event.target.scrollingElement.clientHeight) <= 3.0) {
-
-        console.log(event.target.scrollingElement.scrollHeight, event.target.scrollingElement.scrollTop, event.target.scrollingElement.clientHeight);
-
         const { id: columnId, order } = this.sorted;
 
         const data = await SortableTableLoader.loadData(
