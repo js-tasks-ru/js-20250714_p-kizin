@@ -1,5 +1,5 @@
-import SortableTableBuilder from "./SortableTableBuilder";
-import SortableTableData from "./SortableTableData";
+import SortableTableBuilder from "./SortableTableBuilder.js";
+import SortableTableData from "./SortableTableData.js";
 
 export default class SortableTable extends SortableTableData {
   #element;
@@ -11,7 +11,7 @@ export default class SortableTable extends SortableTableData {
   constructor(headerConfig, data) {
     super(headerConfig, data);
 
-    this.#element = SortableTableBuilder.build(this);
+    this.#element = SortableTableBuilder.createElement(this);
 
     this.#subElements = {
       header: this.#element.children[0],
@@ -24,7 +24,7 @@ export default class SortableTable extends SortableTableData {
 
     const body = this.#element.querySelector(`.sortable-table__body`);
     body.innerHTML = '';
-    body.innerHTML = SortableTableBuilder.buildBodyContent(this);
+    body.innerHTML = SortableTableBuilder.createBodyTemplate(this);
 
     const column = this.#element.querySelector(`.sortable-table__cell[data-id=${columnId}]`);
     column.setAttribute('data-order', order);
