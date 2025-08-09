@@ -1,9 +1,9 @@
 import { ROW_PER_PAGE } from "./constant.js";
-import SortableTableBuilder from "./SortableTableBuilder.js";
-import SortableTableData from "./SortableTableData.js";
+import SortableTableBuilderV3 from "./SortableTableBuilderV3.js";
+import SortableTableDataV3 from "./SortableTableDataV3.js";
 import SortableTableLoader from "./SortableTableLoader.js";
 
-export default class SortableTable extends SortableTableData {
+export default class SortableTableV3 extends SortableTableDataV3 {
   #element;
   get element() { return this.#element; }
 
@@ -17,7 +17,7 @@ export default class SortableTable extends SortableTableData {
   constructor(headerConfig, { url, isSortLocally, sorted }) {
     super(headerConfig, [], url, isSortLocally, sorted);
 
-    this.#element = SortableTableBuilder.createElement(this);
+    this.#element = SortableTableBuilderV3.createElement(this);
 
     this.#subElements = {
       header: this.#element.children[0],
@@ -152,15 +152,15 @@ export default class SortableTable extends SortableTableData {
   #createTemplate(loading = false) {
     const { header } = this.#subElements;
     header.innerHTML = '';
-    header.innerHTML = SortableTableBuilder.createHeaderTemplate(this);
+    header.innerHTML = SortableTableBuilderV3.createHeaderTemplate(this);
 
     let bodyTemplate;
     if (loading) {
-      bodyTemplate = SortableTableBuilder.createLoadingTemplate();
+      bodyTemplate = SortableTableBuilderV3.createLoadingTemplate();
     } else if (this.data.length) {
-      bodyTemplate = SortableTableBuilder.createBodyTemplate(this);
+      bodyTemplate = SortableTableBuilderV3.createBodyTemplate(this);
     } else {
-      bodyTemplate = SortableTableBuilder.createEmptyPlaceholderTemplate();
+      bodyTemplate = SortableTableBuilderV3.createEmptyPlaceholderTemplate();
     }
 
     const { body } = this.#subElements;
@@ -170,6 +170,6 @@ export default class SortableTable extends SortableTableData {
 
   #appendTemplate(data) {
     const { body } = this.#subElements;
-    body.innerHTML = body.innerHTML + SortableTableBuilder.createBodyTemplate({ data });
+    body.innerHTML = body.innerHTML + SortableTableBuilderV3.createBodyTemplate({ data });
   }
 }

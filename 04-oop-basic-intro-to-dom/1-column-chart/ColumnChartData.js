@@ -17,7 +17,7 @@ export default class ColumnChartData {
   #chartHeight;
   get chartHeight() { return this.#chartHeight; }
 
-  constructor({ data = [], label = '', value = 0, link = '', formatHeading = data => `${data}`, chartHeight = 50 } = {}) {
+  constructor({ data = {}, label = '', value = 0, link = '', formatHeading = data => `${data}`, chartHeight = 50 } = {}) {
     this.#data = data;
     this.#label = label;
     this.#value = value;
@@ -26,8 +26,9 @@ export default class ColumnChartData {
     this.#chartHeight = chartHeight;
   }
 
-  update(data = []) {
+  update(data = {}) {
     this.#data = data;
+    this.#value = Object.values(data).reduce((acc, item) => acc + item, 0);
   }
 
   remove() {}

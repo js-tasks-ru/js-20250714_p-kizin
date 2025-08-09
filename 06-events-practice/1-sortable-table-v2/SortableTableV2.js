@@ -1,7 +1,8 @@
-import SortableTableBuilder from "./SortableTableBuilder";
-import SortableTableData from "./SortableTableData";
 
-export default class SortableTable extends SortableTableData {
+import SortableTableBuilder from "../../05-dom-document-loading/2-sortable-table-v1/SortableTableBuilder.js";
+import SortableTableDataV2 from "./SortableTableDataV2.js";
+
+export default class SortableTableV2 extends SortableTableDataV2 {
   #element;
   get element() { return this.#element; }
 

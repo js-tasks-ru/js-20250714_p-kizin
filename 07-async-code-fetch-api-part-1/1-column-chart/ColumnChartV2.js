@@ -1,8 +1,8 @@
-import ColumnChartBuilder from "./ColumnChartBuilder.js";
-import ColumnChartData from "./ColumnChartData.js";
+import ColumnChartBuilder from "../../04-oop-basic-intro-to-dom/1-column-chart/ColumnChartBuilder.js";
+import ColumnChartDataV2 from "./ColumnChartDataV2.js";
 import ColumnChartLoader from "./ColumnChartLoader.js";
 
-export default class ColumnChart extends ColumnChartData {
+export default class ColumnChartV2 extends ColumnChartDataV2 {
   #element;
   get element() { return this.#element; }
 

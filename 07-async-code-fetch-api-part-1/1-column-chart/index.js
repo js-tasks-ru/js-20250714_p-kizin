@@ -1,3 +1,3 @@
-import ColumnChart from "./ColumnChart.js";
+import ColumnChartV2 from "./ColumnChartV2.js";
 
-export default ColumnChart;
+export default ColumnChartV2;

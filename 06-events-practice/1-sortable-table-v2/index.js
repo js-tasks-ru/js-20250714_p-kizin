@@ -1,3 +1,3 @@
-import SortableTable from "./SortableTable";
+import SortableTableV2 from "./SortableTableV2.js";
 
-export default SortableTable;
+export default SortableTableV2;

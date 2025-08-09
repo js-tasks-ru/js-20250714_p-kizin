@@ -4,6 +4,7 @@ export default class SortableTableData {
 
   #data;
   get data() { return this.#data; }
+  set data(data) { this.#data = data;}
 
   constructor(headerConfig = [], data = []) {
     this.#headerConfig = headerConfig;

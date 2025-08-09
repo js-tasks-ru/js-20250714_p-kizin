@@ -1,5 +1,5 @@
-import ColumnChartBuilder from "./ColumnChartBuilder";
-import ColumnChartData from "./ColumnChartData";
+import ColumnChartBuilder from "./ColumnChartBuilder.js";
+import ColumnChartData from "./ColumnChartData.js";
 
 export default class ColumnChart extends ColumnChartData {
   #element;
