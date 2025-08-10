@@ -1,8 +1,9 @@
-import ProductFormBuilder from "./ProductFormBuilder.js";
-import ProductFormData from "./ProductFormData.js";
-import ProductFormLoader from "./ProductFromLoader.js";
+import ProductFormData from "../../08-forms-fetch-api-part-2/1-product-form-v1/ProductFormData.js";
+import ProductFormLoader from "../../08-forms-fetch-api-part-2/1-product-form-v1/ProductFromLoader.js";
+import SortableList from "../2-sortable-list/index.js";
+import ProductFormBuilderV2 from "./ProductFormBuilderV2.js";
 
-export default class ProductForm extends ProductFormData {
+export default class ProductFormV2 extends ProductFormData {
   #element;
   get element() { return this.#element; }
 
@@ -62,7 +63,7 @@ export default class ProductForm extends ProductFormData {
   #createElement() {
     this.#element = document.createElement('div');
     this.#element.classList.add('product-form');
-    this.#element.innerHTML = ProductFormBuilder.createFormTemplate(this, this.#categories);
+    this.#element.innerHTML = ProductFormBuilderV2.createFormTemplate(this, this.#categories);
 
     this.#subElements = {
       productForm: this.#element.children[0],
@@ -71,6 +72,19 @@ export default class ProductForm extends ProductFormData {
       subcategory: this.#element.querySelector('#subcategory'),
       buttonSave: this.#element.querySelector('#buttonsave'),
     };
+
+    const sortableList = new SortableList({
+      items: this.images.map(({ source = '', url = '' }) => {
+        const li = document.createElement('li');
+        li.classList.add('products-edit__imagelist-item');
+        li.innerHTML = ProductFormBuilderV2.createSortableListItemTemplate({ source, url });
+  
+        return li;
+      }),
+    });
+
+    this.#subElements.imageListContainer.children[0].remove();
+    this.#subElements.imageListContainer.append(sortableList.element);
   }
 
   #addImageUploaderHandler() {

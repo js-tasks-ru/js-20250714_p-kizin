@@ -2,21 +2,21 @@ export default class ProductFormBuilder {
   static createFormTemplate(data, categories = []) {
     const formTemplate = `
       <form data-element="productForm" class="form-grid">
-        ${ProductFormBuilder.#createTitleTemplate(data)}
-        ${ProductFormBuilder.#createDescriptionTemplate(data)}
-        ${ProductFormBuilder.#createImageListTemplate(data)}
-        ${ProductFormBuilder.#createSubcategoryTemplate(data, categories)}
-        ${ProductFormBuilder.#createPriceDiscountTemplate(data)}
-        ${ProductFormBuilder.#createQuantityTemplate(data)}
-        ${ProductFormBuilder.#createStatusTemplate(data)}
-        ${ProductFormBuilder.#createButtonsTemplate(data)}
+        ${this.createTitleTemplate(data)}
+        ${this.createDescriptionTemplate(data)}
+        ${this.createImageListTemplate(data)}
+        ${this.createSubcategoryTemplate(data, categories)}
+        ${this.createPriceDiscountTemplate(data)}
+        ${this.createQuantityTemplate(data)}
+        ${this.createStatusTemplate(data)}
+        ${this.createButtonsTemplate(data)}
       </form>
     `;
 
     return formTemplate;
   }
   
-  static #createTitleTemplate({ title = '' } = {}) {
+  static createTitleTemplate({ title = '' } = {}) {
     const titleTemplate = `
       <div class="form-group form-group__half_left">
         <fieldset>
@@ -29,7 +29,7 @@ export default class ProductFormBuilder {
     return titleTemplate;
   }
 
-  static #createDescriptionTemplate({ description = '' } = {}) {
+  static createDescriptionTemplate({ description = '' } = {}) {
     const descriptionTemplate = `
       <div class="form-group form-group__wide">
         <label class="form-label">Описание</label>
@@ -40,7 +40,7 @@ export default class ProductFormBuilder {
     return descriptionTemplate;
   }
 
-  static #createImageListTemplate({ images = [] } = {}) {
+  static createImageListTemplate({ images = [] } = {}) {
     const imageListTemplate = `
       <div class="form-group form-group__wide" data-element="sortable-list-container">
         <label class="form-label">Фото</label>
@@ -72,7 +72,7 @@ export default class ProductFormBuilder {
     return imageListTemplate;
   }
 
-  static #createSubcategoryTemplate({ subcategory = '' } = {}, categories = []) {
+  static createSubcategoryTemplate({ subcategory = '' } = {}, categories = []) {
     const subcategoryTemplate = `
       <div class="form-group form-group__half_left">
         <label class="form-label">Категория</label>
@@ -92,7 +92,7 @@ export default class ProductFormBuilder {
     return subcategoryTemplate;
   }
 
-  static #createPriceDiscountTemplate({ price = 0, discount = 0 } = {}) {
+  static createPriceDiscountTemplate({ price = 0, discount = 0 } = {}) {
     const priceDiscountTemplate = `
       <div class="form-group form-group__half_left form-group__two-col">
         <fieldset>
@@ -109,7 +109,7 @@ export default class ProductFormBuilder {
     return priceDiscountTemplate;
   }
 
-  static #createQuantityTemplate({ quantity = 0 } = {}) {
+  static createQuantityTemplate({ quantity = 0 } = {}) {
     const quantityTemplate = `
       <div class="form-group form-group__part-half">
         <label class="form-label">Количество</label>
@@ -120,7 +120,7 @@ export default class ProductFormBuilder {
     return quantityTemplate;
   }
 
-  static #createStatusTemplate({ status = 0 } = {}) {
+  static createStatusTemplate({ status = 0 } = {}) {
     const statusTemplate = `
       <div class="form-group form-group__part-half">
         <label class="form-label">Статус</label>
@@ -134,7 +134,7 @@ export default class ProductFormBuilder {
     return statusTemplate;
   }
 
-  static #createButtonsTemplate() {
+  static createButtonsTemplate() {
     const buttonsTemplate = `
       <div class="form-buttons">
         <button type="button" name="save" id="buttonsave" class="button-primary-outline">

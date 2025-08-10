@@ -42,14 +42,10 @@ export default class SortableList {
     this.#element.classList.add('sortable-list');
 
     this.#items
-        .map(item => {
-          const li = document.createElement('li');
-          li.classList.add('sortable-list__item');
-          li.append(item);
-
-          return li;
-        })
-        .forEach(li => this.#element.append(li));
+      .forEach(li => {
+        li.classList.add('sortable-list__item');
+        this.#element.append(li);
+      });
   }
 
   #addPointerDownHandler() {
