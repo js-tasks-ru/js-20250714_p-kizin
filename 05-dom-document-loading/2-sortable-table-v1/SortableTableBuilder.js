@@ -1,5 +1,5 @@
 export default class SortableTableBuilder {
-  static build(data) {
+  static createElement(data) {
     const table = document.createElement('div');
     table.classList.add('sortable-table');
 
@@ -7,46 +7,48 @@ export default class SortableTableBuilder {
     header.classList.add('sortable-table__header');
     header.classList.add('sortable-table__row');
     header.setAttribute('data-element', 'header');
-    header.innerHTML = SortableTableBuilder.#buildHeaderContent(data);
+    header.innerHTML = SortableTableBuilder.createHeaderTemplate(data);
 
     table.appendChild(header);
 
     const body = document.createElement('div');
     body.classList.add('sortable-table__body');
     body.setAttribute('data-element', 'body');
-    body.innerHTML = SortableTableBuilder.buildBodyContent(data);
+    body.innerHTML = SortableTableBuilder.createBodyTemplate(data);
 
     table.appendChild(body);
 
     return table;
   }
 
-  static buildBodyContent(data) {
-    const bodyContent = data.data
-        .map(({id, ...rest}) => `
-          <a href="/products" class="sortable-table__row">
-            ${Object.values(rest).map(val => `
-              <div class="sortable-table__cell">${val}</div>
-            `)}
-          </a>
-        `);
-
-    return bodyContent;
-  }
-
-  static #buildHeaderContent(data) {
-    const headerContent = data.headerConfig
+  static createHeaderTemplate(data) {
+    const headerTemplate = data.headerConfig
         .map(({id, title, sortable, order}) => `
-          <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" ${order && `data-order="${order}"`}>
+          <div class="sortable-table__cell" data-id="${id}" data-sortable="${sortable}" ${order ? `data-order="${order}"` : ''}>
             <span>${title}</span>
-              ${order && `
+              ${order ? `
                 <span data-element="arrow" class="sortable-table__sort-arrow">
                   <span class="sort-arrow"></span>
                 </span>
-              `}
+              ` : ''}
           </div>
-        `);
+        `)
+        .reduce((acc, item) => acc + item, '');
       
-    return headerContent;
+    return headerTemplate;
+  }
+
+  static createBodyTemplate(data) {
+    const bodyTemplate = data.data
+        .map(({id, ...rest}) => `
+          <a href="/products" class="sortable-table__row">
+            ${Object.values(rest)
+              .map((val, idx) => `<div class="sortable-table__cell">${val}</div>`)
+              .reduce((acc, item) => acc + item, '')}
+          </a>
+        `)
+        .reduce((acc, item) => acc + item, '');
+
+    return bodyTemplate;
   }
 }

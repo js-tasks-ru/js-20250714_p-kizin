@@ -30,6 +30,7 @@ body {
   position: relative;
   padding: 0;
   margin: 12px 0;
+  user-select: none;
 }
 
 .sortable-list__item {
@@ -110,4 +111,5 @@ body {
   margin: 16px 0;
   border-radius: 4px;
   box-sizing: border-box;
+  min-height: 60px;
 }

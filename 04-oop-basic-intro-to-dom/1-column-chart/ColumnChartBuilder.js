@@ -12,9 +12,9 @@ export default class ColumnChartBuilder {
   }
 
   static buildValues(data) {
-    const maxVal = Math.max(...data.data);
+    const maxVal = Math.max(...Object.values(data.data));
 
-    const values = data.data.map(val => {
+    const values = Object.values(data.data).map(val => {
       const value = document.createElement('div');
 
       value.style.setProperty('--value', Math.floor(val * data.chartHeight / maxVal));
@@ -29,7 +29,7 @@ export default class ColumnChartBuilder {
   static #buildChart(data) {
     const chart = document.createElement('div');
     chart.classList.add('column-chart');
-    if (!data.data.length) {
+    if (!Object.values(data.data).length) {
       chart.classList.add('column-chart_loading');
     }
     chart.style.setProperty('--chart-height', data.chartHeight);
