@@ -21,12 +21,11 @@ export default class ProductFormLoader {
     const formData = new FormData();
     formData.append('image', file);
 
-    const response = axios({
+    const response = fetchJson(IMAGE_BACKEND_URL, {
       method: 'POST',
-      url: IMAGE_BACKEND_URL,
-      data: formData,
+      body: formData,
       headers: {
-        'Authorization': `Client-ID ${IMGUR_CLIENT_ID}`
+        'Authorization': `Client-ID ${IMGUR_CLIENT_ID}`,
       }
     });
 
@@ -34,10 +33,9 @@ export default class ProductFormLoader {
   }
 
   static async saveProduct(data) {
-    await axios({
+    await fetchJson(`${BACKEND_URL}${PRODUCTS_URL}`, {
       method: 'PATCH',
-      url: `${BACKEND_URL}${PRODUCTS_URL}`,
-      data
+      body: data
     });
   }
 }
