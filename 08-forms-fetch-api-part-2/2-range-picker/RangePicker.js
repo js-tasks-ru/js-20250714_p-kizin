@@ -30,11 +30,19 @@ export default class RangePicker extends RangePickerData {
       if (event.target.classList.contains('rangepicker__input')) {
         if (this.#element.classList.contains('rangepicker_open')) {
           this.#element.classList.remove('rangepicker_open');
-          this.#subElements.selector.innerHTML = '';
         }
         else {
+          if (this.#subElements.selector.innerHTML === '') {
+            this.#subElements.selector.innerHTML = RangePickerBuilder.createSelectorTemplate();
+            
+            this.#subElements.calendars = this.#element.querySelectorAll('.rangepicker__calendar');
+
+            this.#subElements.calendars[0].innerHTML = RangePickerBuilder.createCalendar1Template(this);
+            this.#subElements.calendars[1].innerHTML = RangePickerBuilder.createCalendar2Template(this);
+            RangePickerBuilder.updateCalendarTemplate(this, this.#element);
+          }
+
           this.#element.classList.add('rangepicker_open');
-          this.#subElements.selector.innerHTML = RangePickerBuilder.createSelectorTemplate(this);
         }
       }
       else if (event.target.classList.contains('rangepicker__cell')) {
@@ -51,10 +59,13 @@ export default class RangePicker extends RangePickerData {
             this.to = this.from;
             this.from = newDate;
           }
+
+          this.#subElements.input.innerHTML = RangePickerBuilder.createInputTemplate(this);
+
+          this.#subElements.input.click();
         }
 
-        this.#subElements.input.innerHTML = RangePickerBuilder.createInputTemplate(this);
-        this.#subElements.selector.innerHTML = RangePickerBuilder.createSelectorTemplate(this);
+        RangePickerBuilder.updateCalendarTemplate(this, this.#element);
       }
       else if (event.target.classList.contains('rangepicker__selector-control-left')) {
         this.month--;
@@ -63,7 +74,9 @@ export default class RangePicker extends RangePickerData {
           this.year--;
         }
 
-        this.#subElements.selector.innerHTML = RangePickerBuilder.createSelectorTemplate(this);
+        this.#subElements.calendars[0].innerHTML = RangePickerBuilder.createCalendar1Template(this);
+        this.#subElements.calendars[1].innerHTML = RangePickerBuilder.createCalendar2Template(this);
+        RangePickerBuilder.updateCalendarTemplate(this, this.#element);
       }
       else if (event.target.classList.contains('rangepicker__selector-control-right')) {
         this.month++;
@@ -72,7 +85,9 @@ export default class RangePicker extends RangePickerData {
           this.year++;
         }
 
-        this.#subElements.selector.innerHTML = RangePickerBuilder.createSelectorTemplate(this);
+        this.#subElements.calendars[0].innerHTML = RangePickerBuilder.createCalendar1Template(this);
+        this.#subElements.calendars[1].innerHTML = RangePickerBuilder.createCalendar2Template(this);
+        RangePickerBuilder.updateCalendarTemplate(this, this.#element);
       }
     };
 
