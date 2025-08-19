@@ -29,42 +29,87 @@ export default class RangePickerBuilder {
     return inputTemplate;
   }
 
-  static createSelectorTemplate(data) {
-    let fromDate = new Date(data.from);
-    fromDate.setMonth(data.month);
-    fromDate.setFullYear(data.year);
-
-    let toDate = new Date(data.from);
-    toDate.setMonth(data.month + 1);
-    toDate.setFullYear(data.month + 1 < 12 ? data.year : data.year + 1);
-
+  static createSelectorTemplate() {
     const selectorTemplate = `
       <div class="rangepicker__selector-arrow"></div>
       <div class="rangepicker__selector-control-left"></div>
       <div class="rangepicker__selector-control-right"></div>
-      ${RangePickerBuilder.#createCalendarTemplate(data, fromDate)}
-      ${RangePickerBuilder.#createCalendarTemplate(data, toDate)}
+      <div class="rangepicker__calendar"></div>
+      <div class="rangepicker__calendar"></div>
     `;
 
     return selectorTemplate;
   }
 
-  static #createCalendarTemplate({ from = new Date(), to = new Date() } = {}, date = new Date()) {
+  static createCalendar1Template(data) {
+    let fromDate = new Date(data.from);
+    fromDate.setMonth(data.month);
+    fromDate.setFullYear(data.year);
+
+    const calendarTemplate = `
+      ${RangePickerBuilder.#createCalendarTemplate(fromDate)}
+    `;
+
+    return calendarTemplate;
+  }
+
+  static createCalendar2Template(data) {
+    let toDate = new Date(data.from);
+    toDate.setMonth((data.month + 1) % 12);
+    toDate.setFullYear(data.month + 1 < 12 ? data.year : data.year + 1);
+
+    const calendarTemplate = `
+      ${RangePickerBuilder.#createCalendarTemplate(toDate)}
+    `;
+
+    return calendarTemplate;
+  }
+
+  static updateCalendarTemplate({ from = new Date(), to = new Date() } = {}, element) {
+    element
+      .querySelectorAll('.rangepicker__cell')
+      .forEach(cellElement => {
+        const { dataset: { value } } = cellElement;
+
+        const date = new Date(value);
+
+        cellElement.classList.remove('rangepicker__selected-from');
+        cellElement.classList.remove('rangepicker__selected-between');
+        cellElement.classList.remove('rangepicker__selected-to');
+        
+        if (date.getDate() === from.getDate() 
+          && date.getMonth() === from.getMonth() 
+          && date.getFullYear() === from.getFullYear()) {
+          cellElement.classList.add('rangepicker__selected-from');
+        }
+
+        if (date > from && date < to) {
+          cellElement.classList.add('rangepicker__selected-between');
+        }
+
+        if (date.getDate() === to.getDate() 
+          && date.getMonth() === to.getMonth() 
+          && date.getFullYear() === to.getFullYear()) {
+          cellElement.classList.add('rangepicker__selected-to');
+        }
+      });
+  }
+
+  static #createCalendarTemplate(date = new Date()) {
     let calendarTemplate = `
-      <div class="rangepicker__calendar">
-        <div class="rangepicker__month-indicator">
-          <time datetime="November">${MONTH_NAME[date.getMonth()]}</time>
-        </div>
-        <div class="rangepicker__day-of-week">
-          <div>Пн</div>
-          <div>Вт</div>
-          <div>Ср</div>
-          <div>Чт</div>
-          <div>Пт</div>
-          <div>Сб</div>
-          <div>Вс</div>
-        </div>
-        <div class="rangepicker__date-grid">
+      <div class="rangepicker__month-indicator">
+        <time datetime="November">${MONTH_NAME[date.getMonth()]}</time>
+      </div>
+      <div class="rangepicker__day-of-week">
+        <div>Пн</div>
+        <div>Вт</div>
+        <div>Ср</div>
+        <div>Чт</div>
+        <div>Пт</div>
+        <div>Сб</div>
+        <div>Вс</div>
+      </div>
+      <div class="rangepicker__date-grid">
     `;
 
     while (date.getDate() > 1) { date.setDate(date.getDate() - 1); }
@@ -73,14 +118,7 @@ export default class RangePickerBuilder {
     const month = date.getMonth();
     while (date.getMonth() === month) {
       const buttonTemplate = `\
-        <button type="button" class="rangepicker__cell \
-          ${date.getDate() === from.getDate() 
-            && date.getMonth() === from.getMonth() 
-            && date.getFullYear() === from.getFullYear() ? 'rangepicker__selected-from' : ''} \
-          ${date > from && date < to ? 'rangepicker__selected-between' : ''} \
-          ${date.getDate() === to.getDate() 
-            && date.getMonth() === to.getMonth() 
-            && date.getFullYear() === to.getFullYear() ? 'rangepicker__selected-to' : ''}" data-value="${date.toISOString()}" \
+        <button type="button" class="rangepicker__cell" data-value="${date.toISOString()}" \
           ${idx === 0 ? `style="--start-from: ${date.getDay()}"` : ''}>${date.getDate()}</button>`;
 
       calendarTemplate += buttonTemplate;
@@ -89,7 +127,7 @@ export default class RangePickerBuilder {
       idx++;
     }
 
-    calendarTemplate += '</div></div>';
+    calendarTemplate += '</div>';
 
     return calendarTemplate;
   }

@@ -137,12 +137,9 @@ describe('forms-fetch-api-part-2/range-picker', () => {
 
     let from = rangePicker.element.querySelector('.rangepicker__selected-from');
     const prevDate = from.previousElementSibling;
+    const nextDate = from.nextElementSibling;
 
     prevDate.dispatchEvent(new MouseEvent('click', {bubbles: true}));
-
-    from = rangePicker.element.querySelector('.rangepicker__selected-from');
-    const nextDate = from.nextElementSibling.nextElementSibling;
-
     nextDate.dispatchEvent(new MouseEvent('click', {bubbles: true}));
 
     from = rangePicker.element.querySelector('.rangepicker__selected-from');
@@ -215,17 +212,14 @@ describe('forms-fetch-api-part-2/range-picker', () => {
       bubbles: true
     }));
 
-    const [firstCalendar] = selector.querySelectorAll('.rangepicker__calendar');
+    const [firstCalendar, secondCalendar] = selector.querySelectorAll('.rangepicker__calendar');
     const firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
+    const secondDateGrid = secondCalendar.querySelector('.rangepicker__date-grid');
     const firstDate = firstDateGrid.firstElementChild;
+    const lastDate = secondDateGrid.lastElementChild;
 
     // change "from" and "to" dates
     firstDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-
-    const [_, secondCalendar] = selector.querySelectorAll('.rangepicker__calendar');
-    const secondDateGrid = secondCalendar.querySelector('.rangepicker__date-grid');
-    const lastDate = secondDateGrid.lastElementChild;
-
     lastDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     let from = rangePicker.element.querySelector('.rangepicker__selected-from');
@@ -236,11 +230,6 @@ describe('forms-fetch-api-part-2/range-picker', () => {
     expect(to.textContent.trim()).toEqual('30');
 
     // close date picker
-    input.dispatchEvent(new MouseEvent('click', {
-      bubbles: true
-    }));
-
-    // open date picker
     input.dispatchEvent(new MouseEvent('click', {
       bubbles: true
     }));
@@ -295,7 +284,7 @@ describe('forms-fetch-api-part-2/range-picker', () => {
     expect(dateTo).toMatch('31.12.2019');
   });
 
-  /*it('should not change dates \'from\' and \'to\' inside input element if selected only one date', () => {
+  it('should not change dates \'from\' and \'to\' inside input element if selected only one date', () => {
     const input = rangePicker.element.querySelector('.rangepicker__input');
     const selector = rangePicker.element.querySelector('.rangepicker__selector');
 
@@ -321,7 +310,7 @@ describe('forms-fetch-api-part-2/range-picker', () => {
 
     expect(dateFrom).toMatch('02.10.2019');
     expect(dateTo).toMatch('05.11.2019');
-  });*/
+  });
 
   it('should have ability to select minimal dates range equal two days', () => {
     const input = rangePicker.element.querySelector('.rangepicker__input');
@@ -332,18 +321,13 @@ describe('forms-fetch-api-part-2/range-picker', () => {
       bubbles: true
     }));
 
-    let [firstCalendar] = selector.querySelectorAll('.rangepicker__calendar');
-    let firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
-    let firstDate = firstDateGrid.firstElementChild;
+    const [firstCalendar] = selector.querySelectorAll('.rangepicker__calendar');
+    const firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
+    const firstDate = firstDateGrid.firstElementChild;
+    const nexDate = firstDate.nextElementSibling;
 
     // change "from" date to "01.10.2019"
     firstDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-
-    firstCalendar = selector.querySelectorAll('.rangepicker__calendar')[0];
-    firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
-    firstDate = firstDateGrid.firstElementChild;
-    const nexDate = firstDate.nextElementSibling;
-
     // change "to" date to "02.10.2019"
     nexDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
@@ -369,23 +353,18 @@ describe('forms-fetch-api-part-2/range-picker', () => {
       bubbles: true
     }));
 
-    let [firstCalendar] = selector.querySelectorAll('.rangepicker__calendar');
-    let firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
-    let firstDate = firstDateGrid.firstElementChild;
+    const [firstCalendar] = selector.querySelectorAll('.rangepicker__calendar');
+    const firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
+    const firstDate = firstDateGrid.firstElementChild;
 
     // change "from" date to "01.10.2019"
     firstDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-
-    firstCalendar = selector.querySelectorAll('.rangepicker__calendar')[0];
-    firstDateGrid = firstCalendar.querySelector('.rangepicker__date-grid');
-    firstDate = firstDateGrid.firstElementChild;
-
     // change "to" date to "01.10.2019"
     firstDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
     // close date picker
     input.dispatchEvent(new MouseEvent('click', {
-       bubbles: true
+      bubbles: true
     }));
 
     const dateFrom = input.firstElementChild.innerHTML;
@@ -412,9 +391,9 @@ describe('forms-fetch-api-part-2/range-picker', () => {
     // change "from" date to "01.10.2019"
     firstDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
+    const rightNavigation = rangePicker.element.querySelector('.rangepicker__selector-control-right');
+
     for (let i = 0; i < MONTHS_COUNT; i++) {
-      const rightNavigation = rangePicker.element.querySelector('.rangepicker__selector-control-right');
-      
       rightNavigation.dispatchEvent(new MouseEvent('click', {
         bubbles: true
       }));
